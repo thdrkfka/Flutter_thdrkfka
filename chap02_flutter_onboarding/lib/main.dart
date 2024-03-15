@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
+        fontFamily: 'NotoSansKR',
         primarySwatch: Colors.blue,
         // backgroundColor: Color.fromARGB(255, 36, 34, 34),
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -50,12 +51,27 @@ class TestScreen extends StatelessWidget {
   final List<Introduction> list = [
     Introduction(
       title: '시작하는 나',
-      subTitle: '아무것도 모르는 나 자신,,, 그저 시도를 했다,,,',
+      titleTextStyle: TextStyle(
+          color: Colors.deepOrange,
+          fontSize: 50,
+          fontFamily: 'BlackHanSans',
+          fontWeight: FontWeight.w900),
+      subTitle: '아무것도 모르는 나 자신,,, \n 그저 시도를 했다,,,',
+      subTitleTextStyle: TextStyle(
+          color: Colors.deepPurple,
+          fontSize: 30,
+          fontFamily: 'HiMelody',
+          fontWeight: FontWeight.w800),
       imageUrl: 'assets/images/duck.jpg',
     ),
     Introduction(
       title: '현재의 나',
-      subTitle: '아직도 아리송한 나 자신,,, 취뽀 가능한가,,?',
+      titleTextStyle: TextStyle(
+          color: Colors.green,
+          fontSize: 50,
+          fontFamily: 'BlackHanSans',
+          fontWeight: FontWeight.w100),
+      subTitle: '아직도 아리송한 나 자신,,, \n 취뽀 가능한가,,?',
       imageUrl: 'assets/images/falco.jpg',
     ),
     Introduction(
