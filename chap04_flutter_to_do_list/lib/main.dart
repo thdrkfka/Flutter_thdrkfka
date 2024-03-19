@@ -17,6 +17,15 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// ToDo 클래스
+class ToDo {
+  String job; // 할 일
+  bool isDone; // 완료 여부
+
+  ToDo(this.job, this.isDone); // 생성자
+}
+
+// 홈 페이지
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -63,32 +72,7 @@ class _HomePageState extends State<HomePage> {
                         showDialog(
                             context: context,
                             builder: (context) {
-                              return AlertDialog(
-                                title: Center(child: Text('삭제 하시겠습니까?')),
-                                actions: [
-                                  // 취소 버튼
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text(
-                                        '취소',
-                                        style: TextStyle(color: Colors.blue),
-                                      )),
-                                  // 삭제 버튼
-                                  TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          toDoList.removeAt(index);
-                                        });
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text(
-                                        '삭제',
-                                        style: TextStyle(color: Colors.red),
-                                      )),
-                                ],
-                              );
+                              return showDeleteDialog(context, index);
                             });
                       },
                       icon: Icon(CupertinoIcons.delete)),
@@ -116,8 +100,39 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  // 삭제 기능 alert dialog 창 분리
+  AlertDialog showDeleteDialog(BuildContext context, int index) {
+    return AlertDialog(
+      title: Center(child: Text('삭제 하시겠습니까?')),
+      actions: [
+        // 취소 버튼
+        TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text(
+              '취소',
+              style: TextStyle(color: Colors.blue),
+            )),
+        // 삭제 버튼
+        TextButton(
+            onPressed: () {
+              setState(() {
+                toDoList.removeAt(index);
+              });
+              Navigator.pop(context);
+            },
+            child: Text(
+              '삭제',
+              style: TextStyle(color: Colors.red),
+            )),
+      ],
+    );
+  }
 }
 
+// ToDo 생성 페이지
 class CreatePage extends StatefulWidget {
   const CreatePage({super.key});
 
@@ -125,6 +140,7 @@ class CreatePage extends StatefulWidget {
   State<CreatePage> createState() => _CreatePageState();
 }
 
+// ToDoList 등록
 class _CreatePageState extends State<CreatePage> {
   // TextField의 값을 가져올 때 사용
   TextEditingController textController = TextEditingController();
@@ -141,6 +157,7 @@ class _CreatePageState extends State<CreatePage> {
           'ToDoList 작성 페이지',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
+        // 뒤로가기 버튼
         leading: IconButton(
             onPressed: () {
               // 이전 페이지로 이동
@@ -206,13 +223,4 @@ class _CreatePageState extends State<CreatePage> {
       ),
     );
   }
-}
-
-// ToDo 클래스
-class ToDo {
-  String job;
-  bool isDone;
-
-  // 생성자
-  ToDo(this.job, this.isDone);
 }
