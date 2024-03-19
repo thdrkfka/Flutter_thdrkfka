@@ -39,12 +39,14 @@ class _FavoriteCatImagesPageState extends State<FavoriteCatImagesPage> {
                 List.generate(catService.favoriteCatImages.length, (index) {
               String favoriteImage = catService.favoriteCatImages[index];
               return GestureDetector(
-                child: Positioned.fill(
-                  child: Image.network(
-                    favoriteImage,
-                    fit: BoxFit.fill,
+                child: Stack(children: [
+                  Positioned.fill(
+                    child: Image.network(
+                      favoriteImage,
+                      fit: BoxFit.fill,
+                    ),
                   ),
-                ),
+                ]),
               );
             }),
           ),
