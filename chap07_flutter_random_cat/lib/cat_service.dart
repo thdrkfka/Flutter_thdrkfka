@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'main.dart';
+
 /**
  * ChangeNotifier
  * 지정한 값이 변하게되면 해당 값을 보여주는 화면들을 갱신해주는 클래스
@@ -47,7 +49,7 @@ class CatService extends ChangeNotifier {
       // 좋아요 추가..?
       favoriteCatImages.add(catImage);
     }
-
+    prefs.setStringList('favoriteCatImages', favoriteCatImages);
     notifyListeners();
   }
 }
