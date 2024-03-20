@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'main.dart';
 
@@ -10,6 +11,8 @@ import 'main.dart';
  */
 
 class CatService extends ChangeNotifier {
+  SharedPreferences prefs;
+
   // 리스트 고양이 사진들
   List<String> catImages = [];
 
@@ -17,8 +20,10 @@ class CatService extends ChangeNotifier {
   List<String> favoriteCatImages = [];
 
   // CatService 생성자
-  CatService() {
+  CatService(this.prefs) {
     getRandomCatImages();
+    // 저장된 값이 없을 때
+    favoriteCatImages = prefs.getStringList('favorite') ?? [];
   }
 
   // 고양이 이미지 10개 가져오는 메서드
@@ -49,7 +54,11 @@ class CatService extends ChangeNotifier {
       // 좋아요 추가..?
       favoriteCatImages.add(catImage);
     }
-    prefs.setStringList('favoriteCatImages', favoriteCatImages);
+    favoriteImage();
     notifyListeners();
+  }
+
+  favoriteImage() {
+    prefs.setStringList('favorite', favoriteCatImages);
   }
 }

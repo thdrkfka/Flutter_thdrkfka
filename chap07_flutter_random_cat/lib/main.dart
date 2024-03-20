@@ -5,20 +5,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'cat_service.dart';
 import 'homepage.dart';
 
-late SharedPreferences prefs;
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  prefs = await SharedPreferences.getInstance();
-
-  List<String>? favoriteCatImages =
-      prefs.getStringList('favoriteCatImgaes') ?? [];
+  SharedPreferences prefs = await SharedPreferences.getInstance();
 
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => CatService()),
+        ChangeNotifierProvider(create: (context) => CatService(prefs)),
       ],
       child: MyApp(),
     ),
@@ -33,19 +28,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: HomePage(),
-    );
-  }
-}
-
-class TestScreen extends StatelessWidget {
-  const TestScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('test screen'),
-      ),
     );
   }
 }
