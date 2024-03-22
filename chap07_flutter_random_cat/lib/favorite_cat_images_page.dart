@@ -37,14 +37,24 @@ class _FavoriteCatImagesPageState extends State<FavoriteCatImagesPage> {
             padding: EdgeInsets.all(8),
             children:
                 List.generate(catService.favoriteCatImages.length, (index) {
-              String favoriteImage = catService.favoriteCatImages[index];
+              String catImage = catService.favoriteCatImages[index];
               return GestureDetector(
                 child: Stack(
                   children: [
                     Positioned.fill(
                       child: Image.network(
-                        favoriteImage,
+                        catImage,
                         fit: BoxFit.fill,
+                      ),
+                    ),
+                    Positioned(
+                      right: 8,
+                      bottom: 8,
+                      child: Icon(
+                        Icons.favorite,
+                        color: catService.favoriteCatImages.contains(catImage)
+                            ? Colors.red
+                            : Colors.transparent, // 투명색으로 해준다.
                       ),
                     ),
                   ],

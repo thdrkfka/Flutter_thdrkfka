@@ -6,8 +6,10 @@ import 'cat_service.dart';
 import 'homepage.dart';
 
 void main() async {
+  // main()함수에서 async를 쓰려면 필요
   WidgetsFlutterBinding.ensureInitialized();
 
+  // 인스턴스 생성
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   runApp(

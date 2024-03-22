@@ -22,7 +22,7 @@ class CatService extends ChangeNotifier {
   // CatService 생성자
   CatService(this.prefs) {
     getRandomCatImages();
-    // 저장된 값이 없을 때
+    // 저장된 값이 없을 때 // 기본값 설정
     favoriteCatImages = prefs.getStringList('favorite') ?? [];
   }
 
