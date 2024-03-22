@@ -2,8 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'main.dart';
-
 /**
  * ChangeNotifier
  * 지정한 값이 변하게되면 해당 값을 보여주는 화면들을 갱신해주는 클래스
