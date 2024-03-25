@@ -1,3 +1,6 @@
+import 'dart:js_interop_unsafe';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -75,10 +78,45 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    // add 버튼을 눌렀을 때 job을 추가
+                  },
                   child: Icon(Icons.add),
                 ),
               ],
+            ),
+          ),
+          Divider(
+            height: 1,
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                String job = '$index';
+                bool isDone = false;
+
+                return ListTile(
+                  title: Text(
+                    job,
+                    style: TextStyle(
+                        fontSize: 24,
+                        color: isDone ? Colors.grey : Colors.black,
+                        decoration: isDone
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none),
+                  ),
+                  trailing: IconButton(
+                    onPressed: () {
+                      // 삭제 버튼 눌렀을 때 동작
+                    },
+                    icon: Icon(CupertinoIcons.delete),
+                  ),
+                  onTap: () {
+                    // 아이템을 클릭했을 때, isDone 상태 변경
+                  },
+                );
+              },
             ),
           ),
         ],
