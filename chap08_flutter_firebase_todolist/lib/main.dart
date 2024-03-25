@@ -1,8 +1,26 @@
+import 'package:chap08_flutter_firebase_todolist/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // firebase app 시작
+  await Firebase.initializeApp();
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => AuthService(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -10,9 +28,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.read<AuthService>().currentUser();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: user == null ? LoginPage() : HomePage(),
     );
   }
 }
@@ -31,55 +50,96 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('로그인'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-              child: Text(
-                '로그인 해주세요.',
-                style: TextStyle(fontSize: 25),
-              ),
+    return Consumer<AuthService>(
+      builder: (context, authService, child) {
+        // 로그인한 유저 객체 가져오기
+        User? user = authService.currentUser();
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('로그인'),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: Text(
+                    user == null ? '로그인 해주세요.' : '${user.email} 님, 안녕하세요.',
+                    style: TextStyle(fontSize: 25),
+                  ),
+                ),
+                TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(hintText: '이메일'),
+                ),
+                TextField(
+                  controller: passwordController,
+                  obscureText: true, // 비밀번호 숨김 표시
+                  decoration: InputDecoration(hintText: '비밀번호'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    // 로그인
+                    authService.signIn(
+                      email: emailController.text,
+                      password: passwordController.text,
+                      onSuccess: () {
+                        // 로그인 성공 스낵바
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('로그인 성공'),
+                          ),
+                        );
+
+                        // 로그인 성공 시 HomePage로 이동
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => HomePage(),
+                            ));
+                      },
+                      onError: (err) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(err),
+                          ),
+                        ); // snackbar - 창이 올라왔다 사라짐.
+                      },
+                    );
+                  },
+                  child: Text(
+                    '로그인',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    // 회원가입 페이지로 이동
+                    authService.signUp(
+                      email: emailController.text,
+                      password: passwordController.text,
+                      onSuccess: () {
+                        // 회원가입 성공
+                        print('회원가입 성공');
+                      },
+                      onError: (err) {
+                        // 회원가입 에러 발생
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(err))); // snackbar - 창이 올라왔다 사라짐.
+                      },
+                    );
+                  },
+                  child: Text(
+                    '회원 가입',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                ),
+              ],
             ),
-            TextField(
-              controller: emailController,
-              decoration: InputDecoration(hintText: '이메일'),
-            ),
-            TextField(
-              controller: passwordController,
-              decoration: InputDecoration(hintText: '비밀번호'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // 로그인 성공 시 HomePage로 이동
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomePage(),
-                    ));
-              },
-              child: Text(
-                '로그인',
-                style: TextStyle(fontSize: 24),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // 회원가입 페이지로 이동
-              },
-              child: Text(
-                '회원 가입',
-                style: TextStyle(fontSize: 24),
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -104,6 +164,8 @@ class _HomePageState extends State<HomePage> {
           TextButton(
             onPressed: () {
               // 로그아웃 버튼을 눌렀을 때 로그인 페이지로 이동
+              // 일회성으로 참조해서 사용 가능
+              context.read<AuthService>().signOut();
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
