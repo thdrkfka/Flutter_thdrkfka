@@ -1,5 +1,3 @@
-import 'dart:js_interop_unsafe';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: LoginPage(),
     );
   }
 }
@@ -33,7 +31,56 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('로그인'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Text(
+                '로그인 해주세요.',
+                style: TextStyle(fontSize: 25),
+              ),
+            ),
+            TextField(
+              controller: emailController,
+              decoration: InputDecoration(hintText: '이메일'),
+            ),
+            TextField(
+              controller: passwordController,
+              decoration: InputDecoration(hintText: '비밀번호'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // 로그인 성공 시 HomePage로 이동
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => HomePage(),
+                    ));
+              },
+              child: Text(
+                '로그인',
+                style: TextStyle(fontSize: 24),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // 회원가입 페이지로 이동
+              },
+              child: Text(
+                '회원 가입',
+                style: TextStyle(fontSize: 24),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
