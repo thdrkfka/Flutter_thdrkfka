@@ -232,11 +232,18 @@ class _HomePageState extends State<HomePage> {
                 child: FutureBuilder<QuerySnapshot>(
                     future: toDoService.read(user.uid),
                     builder: (context, snapshot) {
+                      /**
+                       * snapshot.data 는 값을 가지고 오는데 시간이 걸린다.
+                       * docs의 경우 데이터가 있는 경우에만 호출이 가능하기 때문에 data 뒤에 ? nullable을 지정해준다.
+                       */
+                      // 반환되는 값 // ?? => 값이 없을 때, 빈값으로 넘겨준다.
+                      final documents = snapshot.data?.docs ?? [];
                       return ListView.builder(
-                        itemCount: 1,
+                        itemCount: documents.length,
                         itemBuilder: (context, index) {
-                          String job = '$index';
-                          bool isDone = false;
+                          final doc = documents[index];
+                          String job = doc.get('job');
+                          bool isDone = doc.get('isDone');
 
                           return ListTile(
                             title: Text(
@@ -251,11 +258,13 @@ class _HomePageState extends State<HomePage> {
                             trailing: IconButton(
                               onPressed: () {
                                 // 삭제 버튼 눌렀을 때 동작
+                                toDoService.delete(doc.id);
                               },
                               icon: Icon(CupertinoIcons.delete),
                             ),
                             onTap: () {
                               // 아이템을 클릭했을 때, isDone 상태 변경
+                              toDoService.update(doc.id, !isDone);
                             },
                           );
                         },

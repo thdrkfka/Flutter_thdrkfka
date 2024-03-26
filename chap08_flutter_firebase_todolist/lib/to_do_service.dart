@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 class ToDoService extends ChangeNotifier {
-  final todoCollection = FirebaseFirestore.instance.collection('toDo');
+  final toDoCollection = FirebaseFirestore.instance.collection('toDo');
 
   // 읽기
   /**
@@ -11,13 +11,16 @@ class ToDoService extends ChangeNotifier {
    */
   Future<QuerySnapshot> read(String uid) async {
     // 내 toDoList 가져오기
-    throw UnimplementedError(); // 임시로 return 값 미구현 에러
+    // throw UnimplementedError(); // 임시로 return 값 미구현 에러
+
+    // query 작성함.
+    return toDoCollection.where('uid', isEqualTo: uid).get();
   }
 
   // 쓰기
   void create(String job, String uid) async {
     // todo 만들기
-    await todoCollection.add({
+    await toDoCollection.add({
       'uid': uid,
       'job': job,
       'isDone': false,
@@ -28,10 +31,16 @@ class ToDoService extends ChangeNotifier {
   // 수정
   void update(String docId, bool isDone) async {
     // toDo isDone update
+    await toDoCollection.doc(docId).update(
+      {'isDone': isDone},
+    );
+    notifyListeners();
   }
 
   // 삭제
   void delete(String docId) async {
     // toDo 삭제
+    await toDoCollection.doc(docId).delete();
+    notifyListeners();
   }
 }
