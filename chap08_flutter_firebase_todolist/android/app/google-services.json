@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "207594088313",
-    "project_id": "todolistwithfirebase-cb070",
-    "storage_bucket": "todolistwithfirebase-cb070.appspot.com"
+    "project_number": "473080934191",
+    "project_id": "todolistwithfirebase-e63fa",
+    "storage_bucket": "todolistwithfirebase-e63fa.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:207594088313:android:952c8ef989c4c91e9031a8",
+        "mobilesdk_app_id": "1:473080934191:android:fa3509c2880ce0c1f9fbda",
         "android_client_info": {
           "package_name": "com.ohgiraffers.chap08_flutter_firebase_todolist"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC8-xV50eH7qrmrInlPvTXFl-miAltYofQ"
+          "current_key": "AIzaSyAnCSnPYli90ImvYP6Y2id8DlY6l75f5Xo"
         }
       ],
       "services": {
